@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* NLE graphite surfaces */
+  --ink: 216 19% 5%; /* page background        #0B0D10 */
+  --panel: 217 15% 9%; /* cards / panels         #14171C */
+  --raised: 216 14% 13%; /* hover / raised panels  #1D2026 */
+  --line: 215 13% 17%; /* hairline borders       #262B31 */
+
+  /* Text */
+  --chalk: 216 12% 94%; /* primary text           #ECEEF1 */
+  --dim: 214 10% 59%; /* secondary text         #8B93A0 */
+
+  /* Signals */
+  --rec: 4 100% 59%; /* record red             #FF3B30 */
+  --guide: 40 100% 65%; /* safe-area amber        #FFC24D */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-ink text-chalk antialiased;
+  font-feature-settings: "ss01", "cv11";
+}
+
+::selection {
+  background: hsl(var(--rec) / 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
