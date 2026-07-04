@@ -1,8 +1,4 @@
-"""Reframe API — application entry point.
-
-Run locally:
-    uvicorn app.main:app --reload --port 8000
-"""
+"""Reframe API — entry point."""
 
 from __future__ import annotations
 
@@ -18,12 +14,9 @@ from .config import settings
 from .core import cleanup
 from .core.executor import pool
 from .core.registry import registry
-from .routes import health, jobs
+from .routes import clips, health, jobs, trends, upload, youtube
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger("reframe")
 
 
@@ -34,7 +27,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     cleanup.purge_orphans()
     pool.start()
     reaper_task = asyncio.create_task(cleanup.reaper(), name="reframe-reaper")
-    logger.info("%s v%s ready (work dir: %s)", settings.app_name, settings.version, settings.work_dir)
+    logger.info("%s v%s ready", settings.app_name, settings.version)
     try:
         yield
     finally:
@@ -66,3 +59,7 @@ app.add_middleware(
 
 app.include_router(health.router, prefix="/api")
 app.include_router(jobs.router, prefix="/api")
+app.include_router(upload.router, prefix="/api")
+app.include_router(youtube.router, prefix="/api")
+app.include_router(clips.router, prefix="/api")
+app.include_router(trends.router, prefix="/api")
